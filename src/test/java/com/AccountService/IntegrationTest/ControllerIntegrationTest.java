@@ -1,4 +1,4 @@
-package com.AccountService;
+package com.AccountService.IntegrationTest;
 
 import com.AccountService.DTO.UserDTO;
 import com.AccountService.controller.AccountServiceController;
@@ -30,7 +30,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @RunWith(SpringRunner.class)
 @WebMvcTest(AccountServiceController.class)
-public class ControllerTest {
+public class ControllerIntegrationTest {
 
     @Autowired
     MockMvc mockMvc;
@@ -99,6 +99,6 @@ public class ControllerTest {
                 .andExpect(status().isBadRequest())
                 .andExpect(result -> assertTrue(result.getResolvedException() instanceof UserExistsException))
                 .andExpect(result ->
-                        assertEquals("User exists", result.getResolvedException().getMessage()));;
+                        assertEquals("User exists", result.getResolvedException().getMessage()));
     }
 }

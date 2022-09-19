@@ -1,4 +1,4 @@
-package com.AccountService;
+package com.AccountService.UnitTest;
 
 import com.AccountService.DTO.UserDTO;
 import com.AccountService.exception.UserExistsException;

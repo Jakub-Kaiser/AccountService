@@ -1,4 +1,4 @@
-package com.AccountService;
+package com.AccountService.UnitTest;
 
 import com.AccountService.entity.UserEntity;
 import com.AccountService.repository.UserRepository;
