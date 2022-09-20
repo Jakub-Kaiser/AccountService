@@ -31,7 +31,7 @@ public class ControllerUnitTest {
 
     @BeforeEach
     void setUp() {
-//        controller = new AccountServiceController(userService);
+        controller = new AccountServiceController(userService);
         correctUserDTO = new UserDTO("Jakub", "Kaiser", "kuba@acme.com", "123");
         incorrectUserDTO = new UserDTO("Jakub", "Kaiser", "kuba@gmail.com", "123");
         expectedReturnUserDTO = new UserDTO(0L, "Jakub", "Kaiser", "kuba@acme.com", "123");
@@ -44,7 +44,7 @@ public class ControllerUnitTest {
 
     @Test
     void shouldReturnStatusBAD_REQUEST() {
-        assertEquals(HttpStatus.BAD_REQUEST, controller.register(incorrectUserDTO).getStatusCode());
+        assertEquals(HttpStatus.BAD_REQUEST, controller.register(null).getStatusCode());
     }
 
     @Test

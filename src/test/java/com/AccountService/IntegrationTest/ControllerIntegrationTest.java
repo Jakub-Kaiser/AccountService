@@ -14,6 +14,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
@@ -25,7 +26,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @RunWith(SpringRunner.class)
@@ -58,7 +59,17 @@ public class ControllerIntegrationTest {
         inputUserWrongEmail.put("password", "123");
 
         returnUserWithId = new UserDTO(0L,"Jakub", "Kaiser", "kuba@acme.com", "123");
+    }
 
+    @Test
+    @WithMockUser
+    void testAuthorizedUser() throws Exception {
+        mockMvc.perform(get("/auth")).andExpect(status().isOk());
+    }
+
+    @Test
+    void testUnAuthorizedUser() throws Exception {
+        mockMvc.perform(get("/auth")).andExpect(status().isUnauthorized());
     }
 
     @Test
