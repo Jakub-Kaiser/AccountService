@@ -24,6 +24,7 @@ import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.isNull;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -111,5 +112,19 @@ public class ControllerIntegrationTest {
                 .andExpect(result -> assertTrue(result.getResolvedException() instanceof UserExistsException))
                 .andExpect(result ->
                         assertEquals("User exists", result.getResolvedException().getMessage()));
+    }
+
+    @Test
+    void whenEmptyJsonShouldRespondBadRequest() throws Exception {
+        mockMvc.perform(post("/register")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(""))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    void whenEmptyBodyShouldRespondBadRequest() throws Exception {
+        mockMvc.perform(post("/register"))
+                .andExpect(status().isBadRequest());
     }
 }

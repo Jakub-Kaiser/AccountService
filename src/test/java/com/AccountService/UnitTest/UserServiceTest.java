@@ -52,6 +52,7 @@ public class UserServiceTest {
     @Test
     void shouldSaveUser() {
         when(userRepository.existsByEmailIgnoreCase(userDTO.getEmail())).thenReturn(false);
+        userService.saveUser(userDTO);
         verify(userRepository).save(any());
     }
 

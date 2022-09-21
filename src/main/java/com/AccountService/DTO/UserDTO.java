@@ -22,7 +22,7 @@ public class UserDTO {
     @NotNull
     private String lastname;
     @NotNull
-    @Pattern(regexp = "[a-zA-Z0-9.-]+@acme.com",message = "Wrong email")
+    @Pattern(regexp = "[a-zA-Z0-9.-]+@acme.com",message = "Email should be @acme.com")
     private String email;
     @NotEmpty
     @NotNull

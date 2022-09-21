@@ -42,10 +42,6 @@ public class ControllerUnitTest {
         assertEquals(HttpStatus.OK, controller.register(correctUserDTO).getStatusCode());
     }
 
-    @Test
-    void shouldReturnStatusBAD_REQUEST() {
-        assertEquals(HttpStatus.BAD_REQUEST, controller.register(null).getStatusCode());
-    }
 
     @Test
     void shouldReturnOKResponse() {
