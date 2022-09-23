@@ -57,11 +57,11 @@ public class AcceptanceTest {
         inputUser.put("name", "Jakub");
         inputUser.put("lastname", "Kaiser");
         inputUser.put("email", "kuba@acme.com");
-        inputUser.put("password", "123");
+        inputUser.put("password", "111111111111");
         inputUserWrongEmail.put("name", "Jakub");
         inputUserWrongEmail.put("lastname", "Kaiser");
         inputUserWrongEmail.put("email", "kuba@gmail.com");
-        inputUserWrongEmail.put("password", "123");
+        inputUserWrongEmail.put("password", "111111111111");
         returnUserWithId = new UserDTO(0L, "Jakub", "Kaiser", "kuba@acme.com", "123");
         ObjectMapper objectMapper = new ObjectMapper();
         inputJson = objectMapper.writeValueAsString(inputUser);
@@ -113,7 +113,7 @@ public class AcceptanceTest {
 
     @Test
     void shouldAuthorizeUser() throws Exception {
-        mockMvc.perform(get("/auth").with(httpBasic("kuba@acme.com","123")))
+        mockMvc.perform(get("/auth").with(httpBasic("kuba@acme.com","111111111111")))
                 .andExpect(status().isOk());
     }
 

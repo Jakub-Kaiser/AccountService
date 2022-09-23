@@ -29,6 +29,7 @@ dependencies {
 	implementation group: 'org.hibernate', name: 'hibernate-validator', version: '6.1.0.Final'
 	testImplementation group: 'org.assertj', name: 'assertj-core', version: '3.23.1'
 	testImplementation group: 'org.springframework.security', name: 'spring-security-test', version: '5.7.3'
+	implementation 'org.springframework.boot:spring-boot-starter-hateoas:2.7.3'
 
 
 

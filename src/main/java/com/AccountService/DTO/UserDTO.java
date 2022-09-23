@@ -9,6 +9,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
 
 @Getter
 @Setter
@@ -17,15 +18,15 @@ import javax.validation.constraints.Pattern;
 public class UserDTO {
 
     private Long id;
-    @NotEmpty
+    @NotEmpty (message = "name must not be empty")
     private String name;
-    @NotNull
+    @NotEmpty (message = "lastname must not be empty")
     private String lastname;
-    @NotNull
+    @NotEmpty (message = "email must not be empty")
     @Pattern(regexp = "[a-zA-Z0-9.-]+@acme.com",message = "Email should be @acme.com")
     private String email;
-    @NotEmpty
-    @NotNull
+    @NotEmpty (message = "password must not be empty")
+    @Size(min = 12, message = "Password must be at least 12 characters long")
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
 

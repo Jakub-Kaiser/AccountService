@@ -2,6 +2,7 @@ package com.AccountService.exception;
 
 import org.apache.catalina.User;
 import org.apache.catalina.webresources.JarResource;
+import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,10 +14,7 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
 import java.time.LocalDateTime;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 
 @ControllerAdvice
 public class ControllerExceptionHandler extends ResponseEntityExceptionHandler {
@@ -27,12 +25,12 @@ public class ControllerExceptionHandler extends ResponseEntityExceptionHandler {
             UserExistsException e, WebRequest request) {
 
         CustomErrorMessage body = new CustomErrorMessage(
-                HttpStatus.NOT_FOUND.value(),
+                HttpStatus.BAD_REQUEST.value(),
                 LocalDateTime.now(),
                 e.getMessage(),
                 request.getDescription(false));
 
-        return new ResponseEntity<>(body, HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(body, HttpStatus.BAD_REQUEST);
     }
 
 
@@ -49,15 +47,19 @@ public class ControllerExceptionHandler extends ResponseEntityExceptionHandler {
         body.put("timestamp", LocalDateTime.now());
         body.put("exception", ex.getClass());
         List<FieldError> validationErrors = ex.getBindingResult().getFieldErrors();
-        String[] errorMessages = new String[validationErrors.size()];
-        for (int i = 0; i < validationErrors.size(); i++) {
-            if (validationErrors.get(i).getDefaultMessage().equals("must not be empty")) {
-                errorMessages[i] = validationErrors.get(i).getField() + " must not be empty";
-            } else {
-                errorMessages[i] = validationErrors.get(i).getDefaultMessage();
-            }
-        }
-        body.put("errors", errorMessages);
+        List<String> errorList = new ArrayList<>();
+        validationErrors.forEach(
+                error -> errorList.add(error.getDefaultMessage()));
+//        String[] errorMessages = new String[validationErrors.size()];
+//        for (int i = 0; i < validationErrors.size(); i++) {
+//            if (validationErrors.get(i).getDefaultMessage().equals("must not be empty")) {
+//                errorMessages[i] = validationErrors.get(i).getField() + " must not be empty";
+//            } else {
+//                errorMessages[i] = validationErrors.get(i).getDefaultMessage();
+//            }
+//        }
+//        body.put("errors", errorMessages);
+        body.put("errors", errorList);
 
 //        body.put("message", Objects.requireNonNull(ex.getBindingResult().getFieldError()).getDefaultMessage());
         return new ResponseEntity<>(body, headers, status);
