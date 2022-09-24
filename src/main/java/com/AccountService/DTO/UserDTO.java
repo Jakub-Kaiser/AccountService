@@ -26,7 +26,7 @@ public class UserDTO {
     @Pattern(regexp = "[a-zA-Z0-9.-]+@acme.com",message = "Email should be @acme.com")
     private String email;
     @NotEmpty (message = "password must not be empty")
-    @Size(min = 12, message = "Password must be at least 12 characters long")
+    @Size(min = 6, message = "Password must be at least 6 characters long")
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
 

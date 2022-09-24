@@ -1,4 +1,4 @@
-package com.AccountService.AcceptanceTest;
+package com.AccountService.IntegrationTest.FullIntegration;
 
 import com.AccountService.DTO.UserDTO;
 import com.AccountService.exception.UserExistsException;
@@ -10,6 +10,7 @@ import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.shadow.com.univocity.parsers.common.DataValidationException;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -22,6 +23,8 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
+import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -35,7 +38,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @RunWith(SpringRunner.class)
 @SpringBootTest
 @AutoConfigureMockMvc
-public class AcceptanceTest {
+public class ControllerIntTest {
 
     @Autowired
     UserRepository userRepository;
@@ -112,6 +115,34 @@ public class AcceptanceTest {
     }
 
     @Test
+    void shouldRespondPasswordInsecure() throws Exception {
+        inputUser.put("password", "PasswordForMay");
+        inputUser.put("email", "k2@acme.com");
+        inputJson = objectMapper.writeValueAsString(inputUser);
+        mockMvc.perform(post("/register")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(inputJson))
+                .andExpect(status().isBadRequest())
+                .andExpect(result -> assertTrue(result.getResolvedException() instanceof ResponseStatusException))
+                .andExpect(result ->
+                        assertEquals("400 BAD_REQUEST \"The password is insecure\"", result.getResolvedException().getMessage()));
+    }
+
+    @Test
+    void shouldRespondPasswordTooShort() throws Exception{
+        inputUser.put("password", "123");
+        String inputJson = objectMapper.writeValueAsString(inputUser);
+        mockMvc.perform(post("/register")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(inputJson))
+                .andExpect(result ->
+                        assertTrue(result.getResolvedException() instanceof MethodArgumentNotValidException))
+                .andExpect(result ->
+                        assertTrue(result.getResolvedException().getMessage()
+                                .contains("Password must be at least 12 characters long")));
+    }
+
+    @Test
     void shouldAuthorizeUser() throws Exception {
         mockMvc.perform(get("/auth").with(httpBasic("kuba@acme.com","111111111111")))
                 .andExpect(status().isOk());
@@ -128,5 +159,7 @@ public class AcceptanceTest {
         mockMvc.perform(get("/auth").with(httpBasic("kuba@gmail.com","123")))
                 .andExpect(status().isUnauthorized());
     }
+
+
 
 }

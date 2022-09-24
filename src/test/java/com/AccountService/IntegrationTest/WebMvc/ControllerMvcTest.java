@@ -1,8 +1,9 @@
-package com.AccountService.IntegrationTest;
+package com.AccountService.IntegrationTest.WebMvc;
 
 import com.AccountService.DTO.UserDTO;
 import com.AccountService.controller.AccountServiceController;
 import com.AccountService.exception.UserExistsException;
+import com.AccountService.security.BreachedPasswords;
 import com.AccountService.security.UserDetailsServiceImpl;
 import com.AccountService.service.UserService;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -29,14 +30,13 @@ import java.util.Map;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.isNull;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @RunWith(SpringRunner.class)
 @WebMvcTest(AccountServiceController.class)
-public class ControllerIntegrationTest {
+public class ControllerMvcTest {
 
     @Autowired
     MockMvc mockMvc;
@@ -44,6 +44,8 @@ public class ControllerIntegrationTest {
     UserService userService;
     @MockBean
     UserDetailsServiceImpl userDetailsService;
+    @MockBean
+    BreachedPasswords breachedPasswords;
     UserDTO returnUserWithId;
     Map<String, String> inputUser;
     Map<String, String> inputUserWrongEmail;
@@ -103,6 +105,13 @@ public class ControllerIntegrationTest {
     }
 
     @Test
+    void testAddUserWithBreachedPassword() {
+//        when(breachedPasswords.isPasswordBreached(anyString()))
+//                .thenReturn();
+
+    }
+
+    @Test
     @DisplayName("When \"name\" missing, return 400 and \"name must not be empty\"")
     void testAddUserNameMissing() throws Exception{
         inputUser.put("name", "");
@@ -132,13 +141,12 @@ public class ControllerIntegrationTest {
                                 .contains("name must not be empty")))
                 .andExpect(result ->
                         assertTrue(result.getResponse().getContentAsString()
-                                .contains("Password must be at least 12 characters long")));
+                                .contains("Password must be at least 6 characters long")));
     }
 
     @Test
     @DisplayName("When password too short, should return 400 and relevant message")
     void testPasswordTooShort() throws Exception {
-
         String inputJson = objectMapper.writeValueAsString(inputUserShortPassword);
         mockMvc.perform(post("/register")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -146,7 +154,7 @@ public class ControllerIntegrationTest {
                 .andExpect(status().isBadRequest())
                 .andExpect(result ->
                         assertTrue(result.getResolvedException().getMessage()
-                                .contains("default message [Password must be at least 12 characters long]")));
+                                .contains("default message [Password must be at least 6 characters long]")));
     }
 
 
