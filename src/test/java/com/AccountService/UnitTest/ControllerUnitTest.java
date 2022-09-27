@@ -1,7 +1,7 @@
 package com.AccountService.UnitTest;
 
 import com.AccountService.DTO.UserDTO;
-import com.AccountService.controller.AccountServiceController;
+import com.AccountService.controller.UserController;
 import com.AccountService.service.UserService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -19,7 +19,7 @@ import static org.mockito.Mockito.when;
 @ExtendWith(MockitoExtension.class)
 public class ControllerUnitTest {
 
-    AccountServiceController controller;
+    UserController controller;
 
     @Mock
     UserService userService;
@@ -31,7 +31,7 @@ public class ControllerUnitTest {
 
     @BeforeEach
     void setUp() {
-        controller = new AccountServiceController(userService);
+        controller = new UserController(userService);
         correctUserDTO = new UserDTO("Jakub", "Kaiser", "kuba@acme.com", "123");
         incorrectUserDTO = new UserDTO("Jakub", "Kaiser", "kuba@gmail.com", "123");
         expectedReturnUserDTO = new UserDTO(0L, "Jakub", "Kaiser", "kuba@acme.com", "123");

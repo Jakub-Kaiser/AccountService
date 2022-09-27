@@ -25,11 +25,11 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @RestController
 @Validated
-public class AccountServiceController {
+public class UserController {
 
     UserService userService;
     @Autowired
-    public AccountServiceController(UserService userService) {
+    public UserController(UserService userService) {
         this.userService = userService;
     }
 

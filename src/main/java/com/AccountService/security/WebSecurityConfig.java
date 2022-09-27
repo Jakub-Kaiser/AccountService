@@ -25,27 +25,22 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .authorizeRequests()
                 .mvcMatchers("/auth").authenticated()
-                .mvcMatchers("/register").permitAll()
+                .anyRequest().permitAll()
                 .and()
                 .csrf().disable()
                 .headers().frameOptions().disable();
     }
 
-//    @Override
-//    public void configure(AuthenticationManagerBuilder builder) throws Exception {
-//
-//        builder.userDetailsService(userDetailsService)
-//                .passwordEncoder(getEncoder());
-//        builder
-//                .inMemoryAuthentication()
-//                .withUser("admin").password("123").roles()
-//                .and().passwordEncoder(NoOpPasswordEncoder.getInstance());
-//        builder.inMemoryAuthentication()
-//                .passwordEncoder(getEncoder())
-//                .withUser("spring")
-//                .password(getEncoder().encode("secret"))
-//                .roles("USER");
-//    }
+    @Override
+    public void configure(AuthenticationManagerBuilder builder) throws Exception {
+
+        builder.userDetailsService(userDetailsService)
+                .passwordEncoder(getEncoder());
+        builder
+                .inMemoryAuthentication()
+                .withUser("admin").password("123").roles()
+                .and().passwordEncoder(NoOpPasswordEncoder.getInstance());
+    }
     @Bean
     public PasswordEncoder getEncoder() {
         return new BCryptPasswordEncoder(13);

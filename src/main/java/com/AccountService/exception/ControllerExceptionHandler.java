@@ -1,5 +1,6 @@
 package com.AccountService.exception;
 
+import net.bytebuddy.pool.TypePool;
 import org.apache.catalina.User;
 import org.apache.catalina.webresources.JarResource;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
