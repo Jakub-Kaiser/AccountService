@@ -22,5 +22,13 @@ public class PaymentDTO {
     @Min(value = 0, message = "salary must not be negative")
     private long salary;
 
+    public PaymentDTO(String employee, String period, long salary) {
+        this.employee = employee;
+        int month = Integer.parseInt(period.substring(0, period.indexOf("-")));
+        int year = Integer.parseInt(period.substring(period.indexOf("-") + 1));
+        this.period = YearMonth.of(year, month);
+        this.salary = salary;
+    }
+
 
 }

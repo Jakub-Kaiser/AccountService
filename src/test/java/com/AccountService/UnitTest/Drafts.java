@@ -2,6 +2,7 @@ package com.AccountService.UnitTest;
 
 import org.junit.jupiter.api.Test;
 
+import java.time.Year;
 import java.time.YearMonth;
 import java.util.Scanner;
 
@@ -17,6 +18,15 @@ public class Drafts {
 
         String dateString = String.format("%s-%s", yearMonth.getMonthValue(),yearMonth.getYear());
         System.out.println(dateString);
+    }
+
+    @Test
+    void stringToYearMonth() {
+        String stringDate = "01-2022";
+        int month = Integer.parseInt(stringDate.substring(0, stringDate.indexOf("-")));
+        int year = Integer.parseInt(stringDate.substring(stringDate.indexOf("-")+1));
+        YearMonth yearMonth = YearMonth.of(year, month);
+        System.out.println(yearMonth.toString());
     }
 
     @Test

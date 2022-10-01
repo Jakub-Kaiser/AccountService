@@ -31,15 +31,13 @@ public class PaymentController {
     }
 
     @GetMapping("/payments")
-    public String getPayments(
+    public Object getPayments(
             @RequestParam(required = false) String period) {
-        String username = SecurityContextHolder.getContext().getAuthentication().getName();
         if (period == null) {
-            paymentService.getAllUserPayments();
+            return paymentService.getAllUserPayments();
         } else {
-//            paymentService.getPaymentByPeriod(period);
+            return paymentService.getPaymentByPeriod(period);
         }
-        return "";
     }
 
 }
