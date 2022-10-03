@@ -22,7 +22,7 @@ public class UserRepositoryTest {
 
     @BeforeEach
     void addUser() {
-        userRepository.save(new UserEntity("Kuba", "Kaiser", "kuba@acme.com", "123"));
+        userRepository.save(new UserEntity("Kuba", "Kaiser", "kuba@acme.com", "123","ROLE_USER"));
         correctEmail = "kuba@acme.com";
         incorrectEmail = "jakub@acme.com";
     }

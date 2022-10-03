@@ -45,8 +45,8 @@ public class UserServiceUnitTest {
         passwordEncoder = new BCryptPasswordEncoder();
         userService = new UserService(passwordEncoder, userRepository, breachedPasswords);
 //        breachedPasswords = new BreachedPasswords();
-        userDTO = new UserDTO("Jakub", "Kaiser", "kuba@acme.com", "123");
-        expectedReturnUserDTO = new UserDTO(0L, "Jakub", "Kaiser", "kuba@acme.com", "123");
+        userDTO = new UserDTO("Jakub", "Kaiser", "kuba@acme.com", "123","ROLE_USER");
+        expectedReturnUserDTO = new UserDTO(0L, "Jakub", "Kaiser", "kuba@acme.com", "123","ROLE_USER");
     }
 
     @Test

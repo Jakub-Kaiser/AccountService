@@ -22,12 +22,14 @@ public class UserEntity {
     private String lastname;
     private String email;
     private String password;
+    private String role;
 
-    public UserEntity(String name, String lastname, String email, String password) {
+    public UserEntity(String name, String lastname, String email, String password,String role) {
         this.name = name;
         this.lastname = lastname;
         this.email = email;
         this.password = password;
+        this.role = role;
     }
 
     @Override
@@ -39,5 +41,4 @@ public class UserEntity {
                 "password:" + password;
 
     }
-
 }

@@ -14,7 +14,7 @@ public class UserServiceIntTest {
 
     @Autowired
     UserService userService;
-    UserDTO userDTO = new UserDTO("Jakub", "Kaiser", "k@acme.com", "PasswordForMay");
+    UserDTO userDTO = new UserDTO("Jakub", "Kaiser", "k@acme.com", "PasswordForMay","ROLE_USER");
 
     @Test
     void testPasswordBreached() {

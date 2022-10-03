@@ -65,7 +65,7 @@ public class ControllerIntTest {
         inputUserWrongEmail.put("lastname", "Kaiser");
         inputUserWrongEmail.put("email", "kuba@gmail.com");
         inputUserWrongEmail.put("password", "111111111111");
-        returnUserWithId = new UserDTO(0L, "Jakub", "Kaiser", "kuba@acme.com", "123");
+        returnUserWithId = new UserDTO(0L, "Jakub", "Kaiser", "kuba@acme.com", "123", "ROLE_USER");
         ObjectMapper objectMapper = new ObjectMapper();
         inputJson = objectMapper.writeValueAsString(inputUser);
         initialResult = mockMvc.perform(post("/register")

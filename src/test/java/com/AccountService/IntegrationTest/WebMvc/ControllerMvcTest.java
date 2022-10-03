@@ -68,7 +68,7 @@ public class ControllerMvcTest {
         inputUserShortPassword.put("email", "kuba@acme.com");
         inputUserShortPassword.put("password", "123");
 
-        returnUserWithId = new UserDTO(0L, "Jakub", "Kaiser", "kuba@acme.com", "123");
+        returnUserWithId = new UserDTO(0L, "Jakub", "Kaiser", "kuba@acme.com", "123","ROLE_USER");
     }
 
 

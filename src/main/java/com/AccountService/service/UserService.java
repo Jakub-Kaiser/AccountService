@@ -1,5 +1,6 @@
 package com.AccountService.service;
 
+import com.AccountService.DTO.RoleUpdateDTO;
 import com.AccountService.DTO.UserDTO;
 import com.AccountService.entity.UserEntity;
 import com.AccountService.exception.UserExistsException;
@@ -11,10 +12,12 @@ import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -36,7 +39,8 @@ public class UserService {
                 userDTO.getName(),
                 userDTO.getLastname(),
                 userDTO.getEmail(),
-                encryptedPassword
+                encryptedPassword,
+                userDTO.getRole()
         );
         userRepository.save(newUser);
         userDTO.setId(newUser.getId());
@@ -61,5 +65,48 @@ public class UserService {
         }
     }
 
+    public List<UserDTO> getAllUsers() {
+        List<UserEntity> userEntities = userRepository.findAll();
+        List<UserDTO> userDTOS = new ArrayList<>();
+        for (UserEntity userEntity : userEntities) {
+            userDTOS.add(mapUserEntityToDto(userEntity));
+        }
+        return userDTOS;
+    }
 
+    private UserDTO mapUserEntityToDto(UserEntity userEntity) {
+        return new UserDTO(
+                userEntity.getId(),
+                userEntity.getName(),
+                userEntity.getLastname(),
+                userEntity.getEmail(),
+                userEntity.getRole());
+    }
+
+    public UserDTO getUserByUsername(String username) {
+        UserEntity userEntity = userRepository.findByEmailIgnoreCase(username);
+        if (userEntity == null) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"User not found");
+        }
+        return mapUserEntityToDto(userEntity);
+    }
+
+    public UserDTO updateUserRole(RoleUpdateDTO roleUpdate) {
+        UserEntity userEntity = userRepository.findByEmailIgnoreCase(roleUpdate.getUser());
+        if (userEntity == null) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"User not found");
+        }
+        userEntity.setRole(roleUpdate.getRole());
+        userRepository.save(userEntity);
+        return mapUserEntityToDto(userEntity);
+    }
+
+    public String deleteUser(String username) {
+        UserEntity userEntity = userRepository.findByEmailIgnoreCase(username);
+        if (userEntity == null) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"User not found");
+        }
+        userRepository.delete(userEntity);
+        return "User deleted";
+    }
 }

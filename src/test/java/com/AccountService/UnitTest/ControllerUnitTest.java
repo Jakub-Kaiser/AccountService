@@ -32,9 +32,9 @@ public class ControllerUnitTest {
     @BeforeEach
     void setUp() {
         controller = new UserController(userService);
-        correctUserDTO = new UserDTO("Jakub", "Kaiser", "kuba@acme.com", "123");
-        incorrectUserDTO = new UserDTO("Jakub", "Kaiser", "kuba@gmail.com", "123");
-        expectedReturnUserDTO = new UserDTO(0L, "Jakub", "Kaiser", "kuba@acme.com", "123");
+        correctUserDTO = new UserDTO("Jakub", "Kaiser", "kuba@acme.com", "123","ROLE_USER");
+        incorrectUserDTO = new UserDTO("Jakub", "Kaiser", "kuba@gmail.com", "123","ROLE_USER");
+        expectedReturnUserDTO = new UserDTO(0L, "Jakub", "Kaiser", "kuba@acme.com", "123","ROLE_USER");
     }
 
     @Test

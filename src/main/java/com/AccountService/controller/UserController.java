@@ -1,6 +1,7 @@
 package com.AccountService.controller;
 
 
+import com.AccountService.DTO.RoleUpdateDTO;
 import com.AccountService.DTO.UserDTO;
 import com.AccountService.entity.UserEntity;
 import com.AccountService.repository.UserRepository;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
+import javax.websocket.server.PathParam;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
@@ -40,13 +42,28 @@ public class UserController {
 //                linkTo(methodOn(AccountServiceController.class).register(user)).withSelfRel());
     }
 
-    @GetMapping("/auth")
-    public void getAuth() {
-    }
-
     @PostMapping("/changePassword")
     public String changePassword(@RequestBody @Valid PasswordDTO newPassword) {
         return userService.changePassword(newPassword.getNewPassword());
+    }
+
+    @GetMapping("/users")
+    public Object getUsers(@RequestParam(required = false) String username) {
+        if (username == null) {
+            return userService.getAllUsers();
+        } else {
+            return userService.getUserByUsername(username);
+        }
+    }
+
+    @PutMapping("/users/roles")
+    public UserDTO updateUserRole(@RequestBody RoleUpdateDTO roleUpdate) {
+        return userService.updateUserRole(roleUpdate);
+    }
+
+    @DeleteMapping("/users/{username}")
+    public String deleteUser(@PathVariable String username) {
+        return userService.deleteUser(username);
     }
 
 
