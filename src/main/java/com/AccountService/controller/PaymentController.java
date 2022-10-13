@@ -3,14 +3,11 @@ package com.AccountService.controller;
 import com.AccountService.DTO.PaymentDTO;
 import com.AccountService.service.PaymentService;
 import lombok.AllArgsConstructor;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import javax.validation.constraints.Pattern;
-import java.util.Calendar;
 import java.util.List;
 
 @RestController
@@ -32,12 +29,28 @@ public class PaymentController {
 
     @GetMapping("/payments")
     public Object getPayments(
+            @RequestParam(required = false) String username,
             @RequestParam(required = false) String period) {
-        if (period == null) {
-            return paymentService.getAllUserPayments();
+        if (username == null && period == null) {
+            return paymentService.getAllPayments();
+        } else if (period == null) {
+            return paymentService.getAllPaymentsByUser(username);
+        } else if (username == null) {
+            return paymentService.getAllPaymentsByPeriod(period);
         } else {
-            return paymentService.getPaymentByPeriod(period);
+            return paymentService.getPaymentByUserAndPeriod(username, period);
         }
     }
+
+    @GetMapping("/my/payments")
+    public Object getMyPayments(@RequestParam(required = false) String period) {
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        if (period == null) {
+            return paymentService.getAllPaymentsByUser(username);
+        } else {
+            return paymentService.getPaymentByUserAndPeriod(username, period);
+        }
+    }
+
 
 }

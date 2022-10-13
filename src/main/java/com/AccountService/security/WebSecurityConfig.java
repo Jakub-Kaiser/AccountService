@@ -24,8 +24,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .httpBasic()
                 .and()
                 .authorizeRequests()
-                .mvcMatchers("/forUser").hasRole("USER")
-                .mvcMatchers("changePassword").authenticated()
+                .mvcMatchers("/users*").hasRole("ADMIN")
+                .mvcMatchers("/payments").hasRole("ACCOUNTANT")
+                .mvcMatchers("/my/payments").authenticated()
+                .mvcMatchers("/changePassword").authenticated()
                 .anyRequest().permitAll()
                 .and()
                 .csrf().disable()
@@ -39,7 +41,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .passwordEncoder(getEncoder());
         builder
                 .inMemoryAuthentication()
-                .withUser("admin").password("123").roles()
+                .withUser("admin").password("123").roles("ADMIN")
                 .and().passwordEncoder(NoOpPasswordEncoder.getInstance());
     }
     @Bean

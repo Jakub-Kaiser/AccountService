@@ -30,7 +30,7 @@ public class UserDTO {
     @Size(min = 6, message = "Password must be at least 6 characters long")
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
-    @NotEmpty(message = "role must not be empty")
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private String role;
 
     public UserDTO(String name, String lastname, String email, String password, String role) {

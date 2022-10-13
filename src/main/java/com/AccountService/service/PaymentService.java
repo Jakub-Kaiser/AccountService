@@ -66,12 +66,12 @@ public class PaymentService {
             throw new UserExistsException(String.format("User %s does not exist", email));
         }
         PaymentEntity paymentEntity = returnPaymentEntityOrThrow(email, periodString);
+        paymentEntity.setSalary(paymentDTO.getSalary());
         paymentRepository.save(paymentEntity);
         return "Payment updated";
     }
 
-    public List<PaymentDTO> getAllUserPayments() {
-        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+    public List<PaymentDTO> getAllPaymentsByUser(String username) {
         List<PaymentEntity> paymentEntities = paymentRepository.findByEmployeeOrderByPeriodDesc(username);
         List<PaymentDTO> paymentDTOs = new ArrayList<>();
         for (PaymentEntity paymentEntity : paymentEntities) {
@@ -85,8 +85,10 @@ public class PaymentService {
         return paymentDTOs;
     }
 
-    public PaymentDTO getPaymentByPeriod(String period) {
-        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+    public PaymentDTO getPaymentByUserAndPeriod(String username, String period) {
+        if (!userRepository.existsByEmailIgnoreCase(username)) {
+            throw new UserExistsException(String.format("User %s does not exist", username));
+        }
         PaymentEntity paymentEntity = returnPaymentEntityOrThrow(username, period);
         return new PaymentDTO(
                 paymentEntity.getEmployee(),
@@ -106,5 +108,31 @@ public class PaymentService {
         int month = Integer.parseInt(stringDate.substring(0, stringDate.indexOf("-")));
         int year = Integer.parseInt(stringDate.substring(stringDate.indexOf("-")+1));
         return YearMonth.of(year, month);
+    }
+
+    public List<PaymentDTO> getAllPayments() {
+        List<PaymentEntity> paymentEntities = paymentRepository.findByOrderByPeriodDesc();
+        List<PaymentDTO> paymentDTOS = new ArrayList<>();
+        for (PaymentEntity paymentEntity : paymentEntities) {
+            paymentDTOS.add(new PaymentDTO(
+                    paymentEntity.getEmployee(),
+                    paymentEntity.getPeriod(),
+                    paymentEntity.getSalary()
+            ));
+        }
+        return paymentDTOS;
+    }
+
+    public List<PaymentDTO> getAllPaymentsByPeriod(String period) {
+        List<PaymentEntity> paymentEntities = paymentRepository.findByPeriodOrderByEmployeeAsc(period);
+        List<PaymentDTO> paymentDTOS = new ArrayList<>();
+        for (PaymentEntity paymentEntity : paymentEntities) {
+            paymentDTOS.add(new PaymentDTO(
+                    paymentEntity.getEmployee(),
+                    paymentEntity.getPeriod(),
+                    paymentEntity.getSalary()
+            ));
+        }
+        return paymentDTOS;
     }
 }

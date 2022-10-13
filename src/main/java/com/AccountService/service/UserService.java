@@ -35,6 +35,7 @@ public class UserService {
         }
         throwIfPasswordBreached(userDTO.getPassword());
         String encryptedPassword = passwordEncoder.encode(userDTO.getPassword());
+        userDTO.setRole("ROLE_USER");
         UserEntity newUser = new UserEntity(
                 userDTO.getName(),
                 userDTO.getLastname(),
