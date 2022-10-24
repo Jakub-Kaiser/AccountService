@@ -2,7 +2,7 @@ package com.AccountService.IntegrationTest.WebMvc;
 
 import com.AccountService.DTO.UserDTO;
 import com.AccountService.controller.UserController;
-import com.AccountService.exception.UserExistsException;
+import com.AccountService.exception.UserNotFoundException;
 import com.AccountService.security.BreachedPasswords;
 import com.AccountService.security.UserDetailsServiceImpl;
 import com.AccountService.service.UserService;
@@ -15,7 +15,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
-import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
@@ -71,17 +70,6 @@ public class ControllerMvcTest {
         returnUserWithId = new UserDTO(0L, "Jakub", "Kaiser", "kuba@acme.com", "123","ROLE_USER");
     }
 
-
-    @Test
-    @WithMockUser
-    void testAuthorizedUser() throws Exception {
-        mockMvc.perform(get("/auth")).andExpect(status().isOk());
-    }
-
-    @Test
-    void testUnAuthorizedUser() throws Exception {
-        mockMvc.perform(get("/auth")).andExpect(status().isUnauthorized());
-    }
 
     @Test
     void testRegisterOkPath() throws Exception {
@@ -165,12 +153,12 @@ public class ControllerMvcTest {
     @Test
     void testRegisterUserExists() throws Exception {
         String inputJson = objectMapper.writeValueAsString(inputUser);
-        when(userService.saveUser(any())).thenThrow(new UserExistsException("User exists"));
+        when(userService.saveUser(any())).thenThrow(new UserNotFoundException("User exists"));
         mockMvc.perform(post("/register")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(inputJson))
                 .andExpect(status().isBadRequest())
-                .andExpect(result -> assertTrue(result.getResolvedException() instanceof UserExistsException))
+                .andExpect(result -> assertTrue(result.getResolvedException() instanceof UserNotFoundException))
                 .andExpect(result ->
                         assertEquals("User exists", result.getResolvedException().getMessage()));
     }

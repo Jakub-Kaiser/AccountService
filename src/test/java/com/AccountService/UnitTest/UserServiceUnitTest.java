@@ -1,7 +1,7 @@
 package com.AccountService.UnitTest;
 
 import com.AccountService.DTO.UserDTO;
-import com.AccountService.exception.UserExistsException;
+import com.AccountService.exception.UserNotFoundException;
 import com.AccountService.repository.UserRepository;
 import com.AccountService.security.BreachedPasswords;
 import com.AccountService.service.UserService;
@@ -11,7 +11,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.server.ResponseStatusException;
@@ -74,7 +73,7 @@ public class UserServiceUnitTest {
     @Test
     void shouldThrowUserExistsException() {
         when(userRepository.existsByEmailIgnoreCase(userDTO.getEmail())).thenReturn(true);
-        Exception exception = assertThrows(UserExistsException.class, () -> {
+        Exception exception = assertThrows(UserNotFoundException.class, () -> {
             userService.saveUser(userDTO);
         });
         String expectedMessage = "User exists";

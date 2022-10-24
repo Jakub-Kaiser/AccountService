@@ -1,9 +1,5 @@
 package com.AccountService.exception;
 
-import net.bytebuddy.pool.TypePool;
-import org.apache.catalina.User;
-import org.apache.catalina.webresources.JarResource;
-import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,9 +17,9 @@ import java.util.*;
 public class ControllerExceptionHandler extends ResponseEntityExceptionHandler {
 
     //for practice purpose
-    @ExceptionHandler(UserExistsException.class)
+    @ExceptionHandler(UserNotFoundException.class)
     public ResponseEntity<CustomErrorMessage> handleUserExistsException(
-            UserExistsException e, WebRequest request) {
+            UserNotFoundException e, WebRequest request) {
 
         CustomErrorMessage body = new CustomErrorMessage(
                 HttpStatus.BAD_REQUEST.value(),

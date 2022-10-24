@@ -17,7 +17,7 @@ public class PaymentDTO {
     private String employee;
     @NotNull(message = "period must not be empty")
     @JsonFormat(pattern = "MM-yyyy")
-    private YearMonth period;
+    private String period;
     @NotNull(message = "salary must not be empty")
     @Min(value = 0, message = "salary must not be negative")
     private long salary;
@@ -26,7 +26,7 @@ public class PaymentDTO {
         this.employee = employee;
         int month = Integer.parseInt(period.substring(0, period.indexOf("-")));
         int year = Integer.parseInt(period.substring(period.indexOf("-") + 1));
-        this.period = YearMonth.of(year, month);
+        this.period = period;
         this.salary = salary;
     }
 

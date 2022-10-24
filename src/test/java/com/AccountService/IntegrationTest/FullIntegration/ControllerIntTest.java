@@ -1,28 +1,21 @@
 package com.AccountService.IntegrationTest.FullIntegration;
 
 import com.AccountService.DTO.UserDTO;
-import com.AccountService.exception.UserExistsException;
+import com.AccountService.exception.UserNotFoundException;
 import com.AccountService.repository.UserRepository;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.json.JSONObject;
-import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.params.shadow.com.univocity.parsers.common.DataValidationException;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
-import org.springframework.test.web.servlet.ResultActions;
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -109,7 +102,7 @@ public class ControllerIntTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(inputJson))
                 .andExpect(status().isBadRequest())
-                .andExpect(result -> assertTrue(result.getResolvedException() instanceof UserExistsException))
+                .andExpect(result -> assertTrue(result.getResolvedException() instanceof UserNotFoundException))
                 .andExpect(result ->
                         assertEquals("User exists", result.getResolvedException().getMessage()));
     }
@@ -139,14 +132,10 @@ public class ControllerIntTest {
                         assertTrue(result.getResolvedException() instanceof MethodArgumentNotValidException))
                 .andExpect(result ->
                         assertTrue(result.getResolvedException().getMessage()
-                                .contains("Password must be at least 12 characters long")));
+                                .contains("Password must be at least 6 characters long")));
     }
 
-    @Test
-    void shouldAuthorizeUser() throws Exception {
-        mockMvc.perform(get("/auth").with(httpBasic("kuba@acme.com","111111111111")))
-                .andExpect(status().isOk());
-    }
+
 
     @Test
     void shouldNotAuthorizeUserWrongPassword() throws Exception {
